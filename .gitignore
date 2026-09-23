@@ -1,1 +1,9 @@
-*.py
+# 运行产物
+__pycache__/
+*.pyc
+*.mp4
+_wb_fixed_scene.xml
+
+# 本地环境
+.venv/
+venv/
