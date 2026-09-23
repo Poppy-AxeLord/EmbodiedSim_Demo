@@ -6,7 +6,7 @@
 ## ▶ 演示（Demo）
 
 <p align="center">
-  <video src="pick_and_place.mp4" width="720" controls></video>
+  <video src="https://github.com/user-attachments/assets/969102fe-9ee4-42d2-9df9-bef9a027c857" width="720" controls></video>
 </p>
 
 *离线渲染的关键阶段帧（frames/）：*
