@@ -387,10 +387,12 @@ def main():
         if args.mp4:
             writer = imageio.get_writer(args.mp4, fps=int(1.0 / CTRL_DT / 2), quality=8)
 
+    # 只在真正渲染时清空历史关键帧；--check 模式不得动已有图片
     os.makedirs(FRAMES_DIR, exist_ok=True)
-    for f in os.listdir(FRAMES_DIR):
-        if f.endswith(".png"):
-            os.remove(os.path.join(FRAMES_DIR, f))
+    if renderer is not None:
+        for f in os.listdir(FRAMES_DIR):
+            if f.endswith(".png"):
+                os.remove(os.path.join(FRAMES_DIR, f))
 
     # 状态机
     belt_running = True

@@ -282,9 +282,10 @@ def main():
 
     frames_dir = os.path.join(OUT_DIR, "frames")
     os.makedirs(frames_dir, exist_ok=True)
-    for f in os.listdir(frames_dir):
-        if f.endswith(".png"):
-            os.remove(os.path.join(frames_dir, f))
+    if renderer is not None:                       # 只在真正渲染时清空历史关键帧
+        for f in os.listdir(frames_dir):
+            if f.endswith(".png"):
+                os.remove(os.path.join(frames_dir, f))
 
     # 状态机
     belt_running = True
