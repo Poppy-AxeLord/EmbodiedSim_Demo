@@ -14,7 +14,7 @@
 | [03](#03-灵巧手--掌内操纵) 经典 | 四指行波协同（参数扫描标定） | **100%** |
 | [06](#06-强化学习--掌内定向旋转) 学习 | PPO / SAC，**无示范**、纯奖励 | **0%**（学会了握稳，没学会搓转） |
 | [07](#07-模仿学习--bc--act--diffusion-policy) 学习 | 9 套专家策略示范 → BC / ACT / Diffusion Policy | **26.7%**（DP）/ 6.7%（BC）/ 0%（ACT） |
-| [08](#08-力控与-mpc--阻抗控制--mpc--onnx-部署) 优化 | 阻抗/力控 + MPC | 力跟踪误差 **< 1%** |
+| [08](#08-力控与-mpc--阻抗控制--mpc--onnx-部署) 优化 | 阻抗/力控 + MPC + ONNX 部署 + 手写刚体动力学 | 力跟踪误差 **< 1%**；动力学对拍 **2e-16** |
 
 > 06 的 0% 不是"没做完"，而是一个**结论**：接触富集的精细时序操作，纯 RL 从零学
 > 需要远超本次 CPU 预算的算力（PPO 700k 步 ≈ 16 分钟；典型机器人 RL 论文用 GPU 集群
@@ -681,11 +681,12 @@ python eval_il.py --demos v1 --tag v1 --mm-only --survey
 
 ## 08 力控与 MPC · 阻抗控制 / MPC / ONNX 部署
 
-同一个灵巧手，回答三个"把策略送上真机"必须回答的问题：
+同一个灵巧手，回答四个"把策略送上真机"必须回答的问题：
 
 1. **抓不抓得住** —— 接触力多大、受扰动会不会掉？→ 阻抗控制 / 力控
 2. **够不够准** —— 多指协同跟踪，MPC 比反应式 IK 强在哪？→ 凸优化
 3. **跑不跑得动** —— 策略能不能导出、推理延迟扛不扛得住控制周期？→ ONNX 部署
+4. **动力学算得对不对** —— 不调引擎，自己写一遍质量矩阵与逆动力学，对拍得上吗？→ 刚体动力学
 
 ### 一、阻抗控制与接触力
 
@@ -759,6 +760,49 @@ python eval_il.py --demos v1 --tag v1 --mm-only --survey
 | 批量吞吐（batch = 1 / 64 / 1024） | ORT **7876 / 111454 / 163136** 样本/秒 vs torch 2251 / 30046 / 94252 |
 | 导出路径 | torch 2.11 默认走 dynamo，需 `dynamo=False` 回落到 TorchScript 导出器 |
 
+### 四、刚体动力学：手写实现与引擎对拍
+
+前面的动力学都是「**用**引擎」：调 `qfrc_bias` 拿重力/科氏力，调 `mj_step` 推进物理。
+这一节把「**实现**动力学」补上——用定义式手写质量矩阵与逆动力学，再与引擎里两个
+**算法路径完全不同**的实现逐元素对拍（手写是全矩阵组装，引擎是递归递推）：
+
+![手写刚体动力学与引擎对拍](08_force_control_and_mpc/results/dynamics_check.png)
+
+**手写的部分**（24 个状态，含球共 30 个自由度）：
+
+```
+M(q) = Σ_i [ m_i · Jᵖᵢᵀ Jᵖᵢ + Jʳᵢᵀ · I_i(world) · Jʳᵢ ] + diag(armature)
+```
+
+逐 body 累加「质心线速度雅可比 + 角速度雅可比」的二次型——这就是质量矩阵的定义式
+（系统动能 = ½·q̇ᵀMq̇ 展开后的二次型）。雅可比与惯量参数由引擎提供，**组装是手写的**，
+不调用任何动力学算法。
+
+| 对拍项 | 参照对象 | 最大相对偏差 |
+|---|---|---|
+| 质量矩阵 M(q) | `mj_fullM`（CRBA 复合刚体算法） | **2.02e-16** |
+| 逆动力学 τ = M·q̈ + C·q̇ + g | `mj_rne`（RNEA 递归牛顿-欧拉） | **9.83e-16** |
+| 科氏项二次齐次性 C(αq̇) = α²·C(q̇) | 解析性质（α = 2.5） | 1.64e-13 |
+| 哨兵：`mj_rne(flg_acc=0)` vs `qfrc_bias` | — | **0（逐位相等）** |
+
+**顺带查出引擎内部一个不一致**：`mj_fullM`(CRBA) **含**转子惯量 armature，
+而 `mj_rne`(RNEA) **不含**。
+
+第一版手写 M 没加 armature，对拍给出 3.3e-3 的相对偏差——再查发现差异**全部落在对角线上**、
+且与 `diag(dof_armature = 2e-4)` 逐位吻合；补上后降到 2e-16。但补上之后逆动力学的对拍误差
+反而涨到 1.5e-2，因为 RNEA 本来就不含 armature。**两条约定都对，只是不一样**：
+对拍 CRBA 要用含 armature 的 M，对拍 RNEA 要用不含的，两者之差恰好是 `armature ⊙ q̈`
+（实测相对偏差 7.6e-15）。
+
+> 这是个真实的坑：只写实现不做对拍，这 2e-4 会一直藏着，
+> 直到某天用它算逆动力学时，表现为一个说不清来源的力矩偏差。
+
+| 附加记录 | 结果 |
+|---|---|
+| M 的对称性 | ‖M − Mᵀ‖ = **5.4e-20** |
+| M 的正定性 | 30 个特征值全为正，范围 [3.84e-5, 6.00e-2]，条件数 1563 |
+| 手写 M 的耗时 | 1.02 ms/次（引擎 `mj_fullM` 0.007 ms，**慢 143×** —— 对拍用，不进控制回路） |
+
 ### 技术要点（全部是踩过的坑）
 
 | 坑 | 现象 | 修法 |
@@ -770,6 +814,8 @@ python eval_il.py --demos v1 --tag v1 --mm-only --survey
 | **MPC：casadi 的 OSQP 插件不可用** | `Plugin 'osqp' is not found` | 改用 **osqp 的 Python API**，手动把 MPC 消元成标准 QP（`H/g/A/l/u`） |
 | **ONNX：`onnxscript` 缺失** | torch 2.11 默认 dynamo 导出直接报错 | 加 `dynamo=False`，走稳定的 TorchScript 路径 |
 | **ONNX：参数量统计错** | 导出时把 `value_net` 也算进去（170,520） | 只挂 `policy_net` + `action_net`，得 **88,344** |
+| **动力学：引擎两个函数约定不一致** | 手写 M 与 `mj_fullM` 差 3.3e-3，但差异**全在对角线上** | `mj_fullM`(CRBA) **含** armature、`mj_rne`(RNEA) **不含**；对拍要各用各的约定，两者之差恰为 `armature ⊙ q̈` |
+| **MuJoCo 3.x 的 API 改名** | `data.qM` 不再存在（现为 `data.M`）；`mj_fullM(m, dst, M)` 变成 `mj_fullM(m, d, dst)` | 老教程的写法在 3.x 上直接报 `AttributeError` / `TypeError` |
 
 ### 运行
 
@@ -778,10 +824,11 @@ python eval_il.py --demos v1 --tag v1 --mm-only --survey
 python 08_force_control_and_mpc/impedance_control.py        # 三档刚度 + 力标定 + 闭环跟踪
 python 08_force_control_and_mpc/mpc_control.py              # DLS-IK vs MPC(OSQP) vs MPC(IPOPT)
 python 08_force_control_and_mpc/deploy_onnx.py              # 导出 ONNX + 延迟/吞吐基准
+python 08_force_control_and_mpc/rigid_body_dynamics.py      # 手写质量矩阵/逆动力学 vs 引擎对拍
 ```
 
-产 `results/impedance_force.png`、`mpc_vs_ik.png`、`onnx_benchmark.png` 与三个 metrics JSON，
-以及入库的 `results/policy.onnx`（346 KB，可直接用 onnxruntime 加载）。
+产 `results/impedance_force.png`、`mpc_vs_ik.png`、`onnx_benchmark.png`、`dynamics_check.png`
+与四个 metrics JSON，以及入库的 `results/policy.onnx`（346 KB，可直接用 onnxruntime 加载）。
 
 > `deploy_onnx.py` 默认读取 `08_force_control_and_mpc/results/ppo_shadow_hand.zip`（不入库）。
 > 先跑一次 06 的训练，或从 `06_reinforcement_learning/results/` 复制过来即可。
@@ -857,10 +904,11 @@ python 07_imitation_learning/collect_demos.py --episodes 150 --tag v1
 python 07_imitation_learning/train_il.py --algo all --demos v1 --epochs 60
 python 07_imitation_learning/eval_il.py --demos v1 --episodes 30 --tag v1
 
-# 08 力控 / MPC / ONNX 部署
+# 08 力控 / MPC / ONNX 部署 / 刚体动力学对拍
 python 08_force_control_and_mpc/impedance_control.py
 python 08_force_control_and_mpc/mpc_control.py
 python 08_force_control_and_mpc/deploy_onnx.py
+python 08_force_control_and_mpc/rigid_body_dynamics.py
 ```
 
 所有机器人的 MJCF 模型均已打包在各自子目录内，**无需下载 Menagerie 仓库**；
@@ -913,6 +961,7 @@ EmbodiedSim_Demo/
     ├─ impedance_control.py           # 阻抗 / 力标定 / 力跟踪闭环
     ├─ mpc_control.py                 # DLS-IK vs MPC(OSQP) vs MPC(IPOPT)
     ├─ deploy_onnx.py                 # ONNX 导出 + 延迟/吞吐基准
+    ├─ rigid_body_dynamics.py         # 手写质量矩阵/逆动力学 vs 引擎对拍
     ├─ hand_common.py / hand_env.py / plot_style.py
     └─ shadow_hand_model/
 ```
