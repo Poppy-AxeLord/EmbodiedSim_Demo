@@ -1,0 +1,112 @@
+{
+  "rows": [
+    {
+      "n_envs": 4,
+      "subproc": true,
+      "n_steps": 1536,
+      "batch": 256,
+      "n_epochs": 10,
+      "threads": 4,
+      "net": [
+        256,
+        256
+      ],
+      "per_round": 6144,
+      "rollout_s": 6.417214250002871,
+      "train_s": 3.557807799996226,
+      "rollout_fps": 957.4247891126981,
+      "train_frac": 0.3566716727204175,
+      "effective_fps": 615.938488075879
+    },
+    {
+      "n_envs": 4,
+      "subproc": true,
+      "n_steps": 1536,
+      "batch": 256,
+      "n_epochs": 10,
+      "threads": 1,
+      "net": [
+        256,
+        256
+      ],
+      "per_round": 6144,
+      "rollout_s": 5.02713245000632,
+      "train_s": 2.8345030000054976,
+      "rollout_fps": 1222.1679180130366,
+      "train_frac": 0.36054877105771127,
+      "effective_fps": 781.5167771472746
+    },
+    {
+      "n_envs": 4,
+      "subproc": true,
+      "n_steps": 2048,
+      "batch": 512,
+      "n_epochs": 4,
+      "threads": 1,
+      "net": [
+        256,
+        256
+      ],
+      "per_round": 8192,
+      "rollout_s": 6.821448900009273,
+      "train_s": 1.1458721499948297,
+      "rollout_fps": 1200.9178871058998,
+      "train_frac": 0.1438215107440963,
+      "effective_fps": 1028.200062302721
+    },
+    {
+      "n_envs": 4,
+      "subproc": true,
+      "n_steps": 3072,
+      "batch": 512,
+      "n_epochs": 3,
+      "threads": 1,
+      "net": [
+        256,
+        256
+      ],
+      "per_round": 12288,
+      "rollout_s": 10.218125550003606,
+      "train_s": 1.2364540500129806,
+      "rollout_fps": 1202.568899732854,
+      "train_frac": 0.10794407941529256,
+      "effective_fps": 1072.7587069177298
+    },
+    {
+      "n_envs": 1,
+      "subproc": false,
+      "n_steps": 2048,
+      "batch": 512,
+      "n_epochs": 4,
+      "threads": 1,
+      "net": [
+        256,
+        256
+      ],
+      "per_round": 2048,
+      "rollout_s": 3.5123916000011377,
+      "train_s": 0.28812235000077635,
+      "rollout_fps": 583.0784927282415,
+      "train_frac": 0.0758114175585729,
+      "effective_fps": 538.8744856465975
+    }
+  ],
+  "best": {
+    "n_envs": 4,
+    "subproc": true,
+    "n_steps": 3072,
+    "batch": 512,
+    "n_epochs": 3,
+    "threads": 1,
+    "net": [
+      256,
+      256
+    ],
+    "per_round": 12288,
+    "rollout_s": 10.218125550003606,
+    "train_s": 1.2364540500129806,
+    "rollout_fps": 1202.568899732854,
+    "train_frac": 0.10794407941529256,
+    "effective_fps": 1072.7587069177298
+  }
+}

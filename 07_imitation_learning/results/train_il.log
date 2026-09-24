@@ -1,0 +1,38 @@
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+==================================================================
+模仿学习训练 · 示范 81,283 步 / 121 集（仅成功示范）
+==================================================================
+动作块 H=8  训练样本 40,254 个块
+
+[BC]
+    epoch   1/60  train 0.05634  val 0.01298
+    epoch  10/60  train 0.00355  val 0.00287
+    epoch  20/60  train 0.00251  val 0.00193
+    epoch  30/60  train 0.00198  val 0.00140
+    epoch  40/60  train 0.00173  val 0.00114
+    epoch  50/60  train 0.00161  val 0.00107
+    epoch  60/60  train 0.00157  val 0.00104
+    参数 88,344 | 用时 238s | val loss 0.00104 -> results/il_bc.pt
+
+[ACT]
+    epoch   1/60  train 0.04996  val 0.01166
+    epoch  10/60  train 0.00183  val 0.00200
+    epoch  20/60  train 0.00070  val 0.00069
+    epoch  30/60  train 0.00040  val 0.00037
+    epoch  40/60  train 0.00024  val 0.00026
+    epoch  50/60  train 0.00018  val 0.00020
+    epoch  60/60  train 0.00016  val 0.00018
+    参数 513,280 | 用时 454s | val loss 0.00018 -> results/il_act.pt
+
+[DP]
+    epoch   1/60  train 0.88012  val 0.73003
+    epoch  10/60  train 0.35019  val 0.34314
+    epoch  20/60  train 0.30623  val 0.30839
+    epoch  30/60  train 0.29142  val 0.29002
+    epoch  40/60  train 0.28658  val 0.28561
+    epoch  50/60  train 0.28093  val 0.28076
+    epoch  60/60  train 0.28131  val 0.28061
+    参数 309,952 | 用时 342s | val loss 0.28061 -> results/il_dp.pt
+
+损失曲线 -> results/il_loss_curves.png

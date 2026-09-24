@@ -3,7 +3,18 @@ __pycache__/
 *.pyc
 *.mp4
 _wb_fixed_scene.xml
+chain*.log
 
 # 本地环境
 .venv/
 venv/
+
+# 早前另一份独立 demo 的遗留目录，不属于本合集
+EmbodiedSim_Demo/
+
+# 07 示范数据集：单文件几十 MB，用 collect_demos.py 一条命令重新生成
+07_imitation_learning/results/demos_*.npz
+# 训练权重：由 train_*.py 重新生成，不入库（08 会给部署演示留一份小的副本）
+06_reinforcement_learning/results/*_shadow_hand.zip
+07_imitation_learning/results/il_*.pt
+08_force_control_and_mpc/results/ppo_shadow_hand.zip

@@ -1,0 +1,33 @@
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+==================================================================
+强化学习训练 · SAC · 200,000 步 · 4 并行环境
+==================================================================
+评估基线……
+  经典专家：成功率 100% | 目标误差 4.2° | 掉球 0%
+  随机策略：成功率 0% | 目标误差 85.3° | 掉球 50%
+
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+[vec] SubprocVecEnv ×4（多进程真并行）
+环境已就绪：观测 (63,) 动作 (24,)
+  [eval] step=   25,000 success=  0.0% err= 51.61° drop= 0.0%
+  [eval] step=   50,000 success=  0.0% err= 51.68° drop= 0.0%
+  [eval] step=   75,000 success=  0.0% err= 52.63° drop= 0.0%
+  [eval] step=  100,000 success=  0.0% err= 45.85° drop= 0.0%
+  [eval] step=  125,000 success=  0.0% err= 36.86° drop= 0.0%
+  [eval] step=  150,000 success=  0.0% err= 43.96° drop= 0.0%
+  [eval] step=  175,000 success=  0.0% err= 36.51° drop= 0.0%
+  [eval] step=  200,000 success=  0.0% err= 44.99° drop= 0.0%
+
+训练完成：200,000 步 / 651 s = 307 steps/s
+
+最终策略：成功率 0% | 目标误差 41.2° | 掉球 0% | 平均累计转角 17°
+模型 -> C:\Users\Lenovo\Desktop\panda_manipulation\06_reinforcement_learning\results\sac_shadow_hand.zip
+学习曲线 -> C:\Users\Lenovo\Desktop\panda_manipulation\06_reinforcement_learning\results\sac_learning_curve.png

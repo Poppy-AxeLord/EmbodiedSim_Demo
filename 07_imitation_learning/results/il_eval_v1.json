@@ -1,0 +1,146 @@
+{
+  "eval": {
+    "随机": {
+      "success_rate": 0.0,
+      "drop_rate": 0.6333333333333333,
+      "mean_err_deg": 58.96678498304684,
+      "mean_cumu_deg": 644.6648017400232,
+      "mean_return": -573.3877621557219,
+      "mean_duration_s": 2.0381333333333336,
+      "action_jerk": 15.988014180436148
+    },
+    "脚本专家": {
+      "success_rate": 0.9666666666666667,
+      "drop_rate": 0.0,
+      "mean_err_deg": 4.449424937178588,
+      "mean_cumu_deg": 97.01765663389558,
+      "mean_return": -23.961230614161188,
+      "mean_duration_s": 1.178666666666667,
+      "action_jerk": 0.11006199776693551
+    },
+    "BC": {
+      "success_rate": 0.06666666666666667,
+      "drop_rate": 0.0,
+      "mean_err_deg": 37.91405224193861,
+      "mean_cumu_deg": 28.20187227420239,
+      "mean_return": -109.4440927834572,
+      "mean_duration_s": 2.8742,
+      "action_jerk": 0.019623824692491347
+    },
+    "ACT": {
+      "success_rate": 0.0,
+      "drop_rate": 0.0,
+      "mean_err_deg": 44.88410002836435,
+      "mean_cumu_deg": 9.168659113316217,
+      "mean_return": -107.3230517110086,
+      "mean_duration_s": 3.0,
+      "action_jerk": 0.14628023185912423
+    },
+    "DP": {
+      "success_rate": 0.26666666666666666,
+      "drop_rate": 0.0,
+      "mean_err_deg": 24.790576928106063,
+      "mean_cumu_deg": 111.65231456597941,
+      "mean_return": -170.92617129265577,
+      "mean_duration_s": 2.8768000000000002,
+      "action_jerk": 1.831248360508464
+    }
+  },
+  "multimodal": {
+    "n_neighbourhood": 250,
+    "demo_action_scale": 0.3385150730609894,
+    "demo_mean_dist_to_nearest_action": 0.07768964767456055,
+    "pca_explained_var": [
+      0.9515997767448425,
+      0.041204359382390976
+    ],
+    "policies": {
+      "bc": {
+        "n_distinct_samples": 1,
+        "tau": 0.07401505355584877,
+        "demo_scale": 0.3385150730609894,
+        "n_distinct_demo": 247,
+        "n_modes_in_neighbourhood": 5,
+        "modes_in_neighbourhood": [
+          "C 低频",
+          "D 高频",
+          "F 强不对称",
+          "G 拇指强反摆",
+          "I 高幅低频"
+        ],
+        "inter_mode_centroid_dist": 0.14803010711169753,
+        "coverage": 0.0,
+        "precision": 0.0,
+        "nn_dist": 0.17965819147751377,
+        "mode_coverage": 0.0,
+        "min_dist_to_mode_centroid": 0.2769589282601358,
+        "dist_to_demo_mean": 0.25341328978538513
+      },
+      "act": {
+        "n_distinct_samples": 128,
+        "tau": 0.07401505355584877,
+        "demo_scale": 0.3385150730609894,
+        "n_distinct_demo": 247,
+        "n_modes_in_neighbourhood": 5,
+        "modes_in_neighbourhood": [
+          "C 低频",
+          "D 高频",
+          "F 强不对称",
+          "G 拇指强反摆",
+          "I 高幅低频"
+        ],
+        "inter_mode_centroid_dist": 0.14803010711169753,
+        "coverage": 0.0,
+        "precision": 0.0,
+        "nn_dist": 0.17790446381090474,
+        "mode_coverage": 0.0,
+        "min_dist_to_mode_centroid": 0.4036411784952373,
+        "dist_to_demo_mean": 0.3411675989627838
+      },
+      "dp": {
+        "n_distinct_samples": 128,
+        "tau": 0.07401505355584877,
+        "demo_scale": 0.3385150730609894,
+        "n_distinct_demo": 247,
+        "n_modes_in_neighbourhood": 5,
+        "modes_in_neighbourhood": [
+          "C 低频",
+          "D 高频",
+          "F 强不对称",
+          "G 拇指强反摆",
+          "I 高幅低频"
+        ],
+        "inter_mode_centroid_dist": 0.14803010711169753,
+        "coverage": 0.0,
+        "precision": 0.0,
+        "nn_dist": 1.1734405906341945,
+        "mode_coverage": 0.0,
+        "min_dist_to_mode_centroid": 0.3526549725057159,
+        "dist_to_demo_mean": 1.100989818572998
+      }
+    },
+    "survey": {
+      "bc": {
+        "mean_distinct_samples": 1.0,
+        "mean_dist_to_demo": 0.05599116931505967,
+        "demo_typical_nn_dist": 0.00642600313154932,
+        "ratio": 8.713218491936855,
+        "mean_modes_hit": 3.25
+      },
+      "act": {
+        "mean_distinct_samples": 32.0,
+        "mean_dist_to_demo": 0.06518895958324529,
+        "demo_typical_nn_dist": 0.00642600313154932,
+        "ratio": 10.144557705425227,
+        "mean_modes_hit": 3.1
+      },
+      "dp": {
+        "mean_distinct_samples": 32.0,
+        "mean_dist_to_demo": 1.1918068816394565,
+        "demo_typical_nn_dist": 0.00642600313154932,
+        "ratio": 185.46627775329296,
+        "mean_modes_hit": 0.9
+      }
+    }
+  }
+}

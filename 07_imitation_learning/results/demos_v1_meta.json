@@ -1,0 +1,32 @@
+{
+  "episodes": 150,
+  "steps": 124297,
+  "seed0": 0,
+  "randomize": true,
+  "tag": "v1",
+  "out": "demos_v1.npz",
+  "modes": [
+    "A 基准协同",
+    "B 低幅",
+    "C 低频",
+    "D 高频",
+    "E 弱波数",
+    "F 强不对称",
+    "G 拇指强反摆",
+    "H 无 J1 耦合",
+    "I 高幅低频"
+  ],
+  "nn_obs_dist": 1.0073902273178101,
+  "nn_pairs": 2000,
+  "cross_mode_pairs": 156,
+  "within_mode_pairs": 237,
+  "same_episode_pairs": 1607,
+  "action_spread": 0.06553199887275696,
+  "action_scale": 1.4919309616088867,
+  "spread_ratio": 0.04392428373635182,
+  "between_mode_action_gap": 0.28282997012138367,
+  "within_mode_action_gap": 0.046024274080991745,
+  "between_over_within": 6.145234786835972,
+  "silhouette": 0.44068774580955505,
+  "hop": "多模态度量"
+}

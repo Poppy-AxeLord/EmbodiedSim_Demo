@@ -1,0 +1,23 @@
+D:\embodied_ai\site-packages\matplotlib\projections\__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+==================================================================
+模仿学习评测 · 每策略 30 个 episode（固定种子）
+==================================================================
+  随机               成功   0.0% | 误差  59.0° | 掉球 63.3% | 累计转角  644.7° | 动作抖动 15.99
+  脚本专家（A 套）        成功  96.7% | 误差   4.4° | 掉球  0.0% | 累计转角   97.0° | 动作抖动 0.11
+  BC               成功   6.7% | 误差  37.9° | 掉球  0.0% | 累计转角   28.2° | 动作抖动 0.02
+  ACT              成功   0.0% | 误差  44.9° | 掉球  0.0% | 累计转角    9.2° | 动作抖动 0.15
+  DP               成功  26.7% | 误差  23.6° | 掉球  0.0% | 累计转角  121.5° | 动作抖动 2.48
+闭环对比图 -> C:\Users\Lenovo\Desktop\panda_manipulation\07_imitation_learning\results\il_comparison.png
+
+多模态复现度分析……
+多模态对比图 -> C:\Users\Lenovo\Desktop\panda_manipulation\07_imitation_learning\results\il_multimodality.png
+  邻域 250 条示范（跨 episode 取近邻），动作尺度 0.263
+  该邻域混了 1 种专家模式：E 弱波数
+  去重后 233 个不同动作，近邻尺度 τ = 0.079
+  BC   采样不同点数    1 | 覆盖率  24.4% | 精度 100.0% | 模式覆盖 100.0% | 到最近示范动作 0.025
+  ACT  采样不同点数  128 | 覆盖率  14.0% | 精度 100.0% | 模式覆盖 100.0% | 到最近示范动作 0.050
+  DP   采样不同点数  128 | 覆盖率   0.0% | 精度   0.0% | 模式覆盖   0.0% | 到最近示范动作 1.685
+  （示范动作的条件均值到最近真实动作 0.023 —— 这就是 BC 会落在的无人区宽度）
+
+指标 -> results/il_eval_v1.json
